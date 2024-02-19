@@ -1,103 +1,71 @@
-import { json, type ActionFunctionArgs, redirect } from '@remix-run/node';
-import { Form, Link, useActionData } from '@remix-run/react';
-
-// import { redirectIfLoggedInLoader, setAuthOnResponse } from "~/auth/auth";
+import { Form, Link, redirect, useActionData } from '@remix-run/react';
 import { Label, Input } from '~/components/input';
 import { Button } from '~/components/button';
-
-// import { validate } from "./validate";
-// import { createAccount } from "./queries";
-
-// export const loader = redirectIfLoggedInLoader;
+import type { ActionFunctionArgs } from '@remix-run/node';
+import { database } from '~/database';
 
 export const meta = () => {
-    return [{ title: 'Trellix Signup' }];
+    return [{ title: 'Signup' }];
 };
 
-// export async function action({ request }: ActionFunctionArgs) {
-//   let formData = await request.formData();
+export async function action({ request }: ActionFunctionArgs) {
+    const formData = await request.formData();
+    const email = String(formData.get('email'));
+    const password = String(formData.get('password'));
 
-//   let email = String(formData.get("email") || "");
-//   let password = String(formData.get("password") || "");
-
-//   let errors = await validate(email, password);
-//   if (errors) {
-//     return json({ ok: false, errors }, 400);
-//   }
-
-//   let user = await createAccount(email, password);
-//   return setAuthOnResponse(redirect("/home"), user.id);
-// }
+    const errors = { emailError: '', passwordError: '' };
+    if (database.some((user) => user.email === email)) {
+        errors.emailError = 'Email already in use';
+    }
+    if (password.length < 8) {
+        errors.passwordError = 'Password must be at least 8 characters';
+    }
+    if (errors.passwordError || errors.emailError) {
+        return errors;
+    }
+    return redirect('/');
+}
 
 export default function Signup() {
-    // let actionResult = useActionData<typeof action>();
+    const actionData = useActionData<typeof action>();
 
     return (
-        <div className='flex min-h-full flex-1 flex-col mt-20 sm:px-6 lg:px-8'>
-            <div className='sm:mx-auto sm:w-full sm:max-w-md'>
-                <h2
-                    id='signup-header'
-                    className='mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900'
-                >
-                    Sign up
-                </h2>
-            </div>
+        <div className='flex min-h-full flex-1 flex-col mt-20'>
+            <h2 id='signup-header' className='text-center text-2xl font-bold text-gray-900'>
+                Sign up
+            </h2>
 
-            <div className='mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]'>
-                <div className='bg-white px-6 py-12 shadow sm:rounded-lg sm:px-12'>
-                    <Form className='space-y-6' method='post'>
-                        <div>
-                            <Label htmlFor='email'>
-                                Email address{' '}
-                                {/* {actionResult?.errors?.email && (
-                  <span id="email-error" className="text-brand-red">
-                    {actionResult.errors.email}
-                  </span>
-                )} */}
-                            </Label>
-                            <Input
-                                // autoFocus
-                                id='email'
-                                name='email'
-                                type='email'
-                                autoComplete='email'
-                                // aria-describedby={
-                                //   actionResult?.errors?.email ? "email-error" : "signup-header"
-                                // }
-                                required
-                            />
-                        </div>
+            <div className='bg-white px-6 py-12 shadow sm:rounded-lg sm:px-12 mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]'>
+                <Form className='flex flex-col gap-6' method='post'>
+                    <div>
+                        <Label htmlFor='email'>Email address </Label>
+                        {actionData?.emailError && <span className='text-red-500'>{actionData?.emailError}</span>}
+                        <Input id='email' name='email' type='email' autoComplete='email' required />
+                    </div>
 
-                        <div>
-                            <Label htmlFor='password'>
-                                Password{' '}
-                                {/* {actionResult?.errors?.password && (
-                  <span id="password-error" className="text-brand-red">
-                    {actionResult.errors.password}
-                  </span>
-                )} */}
-                            </Label>
-                            <Input
-                                id='password'
-                                name='password'
-                                type='password'
-                                autoComplete='current-password'
-                                aria-describedby='password-error'
-                                required
-                            />
-                        </div>
+                    <div>
+                        <Label htmlFor='password'>Password </Label>
+                        {actionData?.passwordError && <span className='text-red-500'>{actionData?.passwordError}</span>}
+                        <Input
+                            id='password'
+                            name='password'
+                            type='password'
+                            autoComplete='current-password'
+                            aria-describedby='password-error'
+                            required
+                        />
+                    </div>
 
-                        <Button type='submit'>Sign in</Button>
+                    <Button type='submit'>Sign in</Button>
 
-                        <div className='text-sm text-slate-500'>
-                            Already have an account?{' '}
-                            <Link className='underline' to='/login'>
-                                Log in
-                            </Link>
-                            .
-                        </div>
-                    </Form>
-                </div>
+                    <div className='text-sm text-slate-500'>
+                        Already have an account?{' '}
+                        <Link className='underline' to='/login'>
+                            Log in
+                        </Link>
+                        .
+                    </div>
+                </Form>
             </div>
         </div>
     );
