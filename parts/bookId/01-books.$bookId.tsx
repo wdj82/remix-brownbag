@@ -1,30 +1,11 @@
-import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
-import { useFetcher, useLoaderData } from '@remix-run/react';
 import { ThumbDownIcon, ThumbUpIcon } from '~/components/icons';
 import { allBookDetails } from '~/database';
 
-export async function loader({ params }: LoaderFunctionArgs) {
-    const bookId = params.bookId;
-    if (!bookId) throw new Error('unknown book');
-    return allBookDetails[bookId];
-}
-
-export async function action({ request, params }: ActionFunctionArgs) {
-    const bookId = params.bookId;
-    if (!bookId) throw new Error('unknown book');
-
-    const formData = await request.formData();
-    const like = String(formData.get('like'));
-    allBookDetails[bookId].like = like;
-    return null;
-}
-
 export default function BookDetails() {
-    const bookDetails = useLoaderData<typeof loader>();
-    const fetcher = useFetcher();
+    const bookDetails = allBookDetails[0];
 
     const handleClick = (like: 'up' | 'down') => {
-        fetcher.submit({ like }, { method: 'post' });
+        console.log(like);
     };
 
     return (

@@ -1,20 +1,12 @@
 import stylesheet from '~/tailwind.css';
-import type { LinksFunction, LoaderFunctionArgs } from '@remix-run/node';
-import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from '@remix-run/react';
+import type { LinksFunction } from '@remix-run/node';
+import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react';
 import { Header } from '~/components/Header';
-import { cookie } from './auth.server';
 
 export const links: LinksFunction = () => [{ rel: 'stylesheet', href: stylesheet }];
 
-export async function loader({ request }: LoaderFunctionArgs) {
-    const cookieString = request.headers.get('Cookie');
-    const userId: number | null = await cookie.parse(cookieString);
-    return userId;
-}
-
 export default function App() {
-    const userId = useLoaderData<typeof loader>();
-    console.log({ userId });
+    const userId = null;
     return (
         <html lang='en'>
             <head>

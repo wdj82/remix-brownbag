@@ -1,6 +1,6 @@
 export const users = [
-    { id: '0', email: 'wjones@clearc2.com', password: 'password' },
-    { id: '1', email: 'apratt@clearc2.com', password: 'password' },
+    { id: 0, email: 'wjones@clearc2.com', password: 'password' },
+    { id: 1, email: 'apratt@clearc2.com', password: 'password' },
 ];
 
 export const books = [
@@ -18,7 +18,7 @@ interface BookDetails {
     like: string;
 }
 
-export const allBookDetails: Record<number, BookDetails> = {
+export const allBookDetails: Record<string, BookDetails> = {
     0: {
         like: '',
         title: 'The House in the Cerulean Sea',

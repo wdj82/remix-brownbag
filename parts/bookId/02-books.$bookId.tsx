@@ -6,7 +6,7 @@ import { allBookDetails } from '~/database';
 export async function loader({ params }: LoaderFunctionArgs) {
     const bookId = params.bookId;
     if (!bookId) throw new Error('unknown book');
-    return allBookDetails[+bookId];
+    return allBookDetails[bookId];
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -15,14 +15,13 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
     const formData = await request.formData();
     const like = String(formData.get('like'));
-    allBookDetails[+bookId].like = like;
+    allBookDetails[bookId].like = like;
     return null;
 }
 
 export default function BookDetails() {
     const bookDetails = useLoaderData<typeof loader>();
     const fetcher = useFetcher();
-    console.log(bookDetails);
 
     const handleClick = (like: 'up' | 'down') => {
         fetcher.submit({ like }, { method: 'post' });
@@ -36,10 +35,10 @@ export default function BookDetails() {
                 </div>
                 <div className='flex gap-4'>
                     <button onClick={() => handleClick('up')}>
-                        <ThumbUpIcon className={`w-6 h-6 ${bookDetails.like === 'up' ? 'stroke-green-500' : null}`} />
+                        <ThumbUpIcon className={`w-6 h-6 ${bookDetails.like === 'up' && 'stroke-green-500'}`} />
                     </button>
                     <button onClick={() => handleClick('down')}>
-                        <ThumbDownIcon className={`w-6 h-6 ${bookDetails.like === 'down' ? 'stroke-red-500' : null}`} />
+                        <ThumbDownIcon className={`w-6 h-6 ${bookDetails.like === 'down' && 'stroke-red-500'}`} />
                     </button>
                 </div>
             </div>

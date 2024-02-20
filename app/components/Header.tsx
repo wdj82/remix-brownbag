@@ -1,15 +1,15 @@
 import { Link } from '@remix-run/react';
 
-export function Header({ userId }: { userId: string | undefined }) {
+export function Header({ userId }: { userId: number | null }) {
     return (
         <header className='bg-slate-900 border-b border-slate-800 flex items-center justify-between py-4 px-8'>
             <Link to='/books'>
                 <div className='text-2xl text-white'>BetterReads</div>
             </Link>
             <div>
-                {userId ? (
+                {userId !== null ? (
                     <form method='post' action='/logout'>
-                        <button>Logout</button>
+                        <button className='text-white'>Logout</button>
                     </form>
                 ) : (
                     <Link to='login' className='text-white'>

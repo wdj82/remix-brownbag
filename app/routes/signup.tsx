@@ -3,6 +3,7 @@ import { Label, Input } from '~/components/input';
 import { Button } from '~/components/button';
 import type { ActionFunctionArgs } from '@remix-run/node';
 import { users } from '~/database';
+import { cookie, createAccount } from '~/auth.server';
 
 export const meta = () => {
     return [{ title: 'Signup' }];
@@ -23,7 +24,14 @@ export async function action({ request }: ActionFunctionArgs) {
     if (errors.passwordError || errors.emailError) {
         return errors;
     }
-    return redirect('/books');
+
+    const userId = await createAccount(email, password);
+
+    return redirect('/books', {
+        headers: {
+            'Set-Cookie': await cookie.serialize(userId),
+        },
+    });
 }
 
 export default function Signup() {
