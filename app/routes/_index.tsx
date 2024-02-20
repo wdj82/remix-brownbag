@@ -8,11 +8,11 @@ export const meta: MetaFunction = () => {
 export default function Index() {
     return (
         <div className='flex gap-6 p-4'>
-            <Link to='/signup' className='text-xl font-medium text-brand-aqua underline'>
+            <Link to='/signup' className='text-xl font-medium underline'>
                 Sign up
             </Link>
 
-            <Link to='/login' className='text-xl font-medium text-brand-aqua underline'>
+            <Link to='/login' className='text-xl font-medium underline'>
                 Login
             </Link>
         </div>

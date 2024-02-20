@@ -2,7 +2,7 @@ import { Form, Link, redirect, useActionData } from '@remix-run/react';
 import { Label, Input } from '~/components/input';
 import { Button } from '~/components/button';
 import type { ActionFunctionArgs } from '@remix-run/node';
-import { database } from '~/database';
+import { users } from '~/database';
 
 export const meta = () => {
     return [{ title: 'Signup' }];
@@ -14,7 +14,7 @@ export async function action({ request }: ActionFunctionArgs) {
     const password = String(formData.get('password'));
 
     const errors = { emailError: '', passwordError: '' };
-    if (database.some((user) => user.email === email)) {
+    if (users.some((user) => user.email === email)) {
         errors.emailError = 'Email already in use';
     }
     if (password.length < 8) {
@@ -23,7 +23,7 @@ export async function action({ request }: ActionFunctionArgs) {
     if (errors.passwordError || errors.emailError) {
         return errors;
     }
-    return redirect('/');
+    return redirect('/books');
 }
 
 export default function Signup() {
