@@ -3,7 +3,7 @@ export const users = [
     { id: 1, email: 'apratt@clearc2.com', password: 'password' },
 ];
 
-export const books = [
+export const bookList = [
     { id: '0', title: 'The House in the Cerulean Sea' },
     { id: '1', title: 'The Eye of the World' },
     { id: '2', title: 'All Systems Red' },

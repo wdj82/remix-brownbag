@@ -1,8 +1,16 @@
+import type { LoaderFunctionArgs } from '@remix-run/node';
+import { useLoaderData } from '@remix-run/react';
 import { ThumbDownIcon, ThumbUpIcon } from '~/components/icons';
 import { allBookDetails } from '~/database';
 
+export async function loader({ params }: LoaderFunctionArgs) {
+    const bookId = params.bookId;
+    if (!bookId) throw new Error('unknown book');
+    return allBookDetails[bookId];
+}
+
 export default function BookDetails() {
-    const bookDetails = allBookDetails[0];
+    const bookDetails = useLoaderData<typeof loader>();
 
     const handleClick = (like: 'up' | 'down') => {
         console.log(like);

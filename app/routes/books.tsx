@@ -1,8 +1,8 @@
 import { Link, Outlet, useLoaderData } from '@remix-run/react';
-import { books } from '~/database';
+import { bookList } from '~/database';
 
 export async function loader() {
-    return books;
+    return bookList;
 }
 
 export default function Books() {
