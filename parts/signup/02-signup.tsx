@@ -1,8 +1,9 @@
-import { Form, Link, useActionData } from '@remix-run/react';
+import { Form, Link, redirect, useActionData, useNavigation } from '@remix-run/react';
 import { Label, Input } from '~/components/input';
 import { Button } from '~/components/button';
 import type { ActionFunctionArgs } from '@remix-run/node';
 import { users } from '~/database';
+import { cookie, createAccount } from '~/auth.server';
 
 export const meta = () => {
     return [{ title: 'Signup' }];
@@ -23,11 +24,21 @@ export async function action({ request }: ActionFunctionArgs) {
     if (errors.passwordError || errors.emailError) {
         return errors;
     }
-    return null;
+
+    const userId = await createAccount(email, password);
+
+    return redirect('/books', {
+        headers: {
+            'Set-Cookie': await cookie.serialize(userId),
+        },
+    });
 }
 
 export default function Signup() {
     const actionData = useActionData<typeof action>();
+    const navigation = useNavigation();
+
+    const submitting = navigation.state === 'submitting';
 
     return (
         <div className='flex min-h-full flex-1 flex-col mt-20'>
@@ -56,7 +67,9 @@ export default function Signup() {
                         />
                     </div>
 
-                    <Button type='submit'>Sign in</Button>
+                    <Button type='submit' disabled={submitting}>
+                        {submitting ? 'Submitting' : 'Sign In'}
+                    </Button>
 
                     <div className='text-sm text-slate-500'>
                         Already have an account?{' '}
