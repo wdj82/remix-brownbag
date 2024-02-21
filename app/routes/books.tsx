@@ -2,11 +2,14 @@ import { Link, Outlet, useLoaderData } from '@remix-run/react';
 import { bookList } from '~/database';
 
 export async function loader() {
-    return bookList;
+    const books = bookList;
+    console.log(books);
+    return books;
 }
 
 export default function Books() {
     const books = useLoaderData<typeof loader>();
+
     return (
         <div className='flex'>
             <div className='flex flex-col gap-4 h-full p-2'>

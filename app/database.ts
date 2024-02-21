@@ -1,7 +1,4 @@
-export const users = [
-    { id: 0, email: 'wjones@clearc2.com', password: 'password' },
-    { id: 1, email: 'apratt@clearc2.com', password: 'password' },
-];
+export const users = [{ id: 0, email: 'wjones@clearc2.com', password: 'password' }];
 
 export const bookList = [
     { id: '0', title: 'The House in the Cerulean Sea' },

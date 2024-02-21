@@ -6,6 +6,10 @@ import { Button } from '~/components/button';
 import { Input, Label } from '~/components/input';
 import { users } from '~/database';
 
+export const meta = () => {
+    return [{ title: 'Login' }];
+};
+
 export async function action({ request }: ActionFunctionArgs) {
     const formData = await request.formData();
     const email = String(formData.get('email'));
